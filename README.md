@@ -3,4 +3,5 @@ jawstats
 
 a fork of jawstats 0.7 beta with support for clusters
 
-first iteration.
+JAWStats Installation guide can be found at:
+http://www.jawstats.com/documentation
