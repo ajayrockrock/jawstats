@@ -226,7 +226,7 @@ var gc_aCountryContinent = {
   "mr":"Africa",
   "mu":"Africa",
   "yt":"Africa",
-  "mx":"South America",
+  "mx":"North America",
   "fm":"Oceania",
   "md":"Europe",
   "mc":"Europe",
