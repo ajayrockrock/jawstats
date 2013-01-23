@@ -192,6 +192,13 @@ function DrawPage(sPage) {
         }
         PageLayout_Country(aPage[1]);
         break;
+      case "cluster":
+        if (typeof oStatistics.oCluster == "undefined") {
+      	  PopulateData_Cluster(sPage);
+      	    return false;
+        }
+        PageLayout_Cluster();
+        break;
       case "filetypes":
         if (typeof oStatistics.oFiletypes == "undefined") {
       	  PopulateData_Filetypes(sPage);
@@ -249,38 +256,38 @@ function DrawPage(sPage) {
         }
         PageLayout_Robots();
         break;
-case "searches":
-  switch (aPage[1]) {
-    case "keyphrasecloud":
-      if (typeof oStatistics.oKeyphrases == "undefined") {
-    	  PopulateData_Keyphrases(sPage);
-    	  return false;
-      }
-      PageLayout_Searches(aPage[1]);
-      break;
-    case "keyphrases":
-      if (typeof oStatistics.oKeyphrases == "undefined") {
-    	  PopulateData_Keyphrases(sPage);
-    	  return false;
-      }
-      PageLayout_Searches(aPage[1]);
-      break;
-    case "keywordcloud":
-      if (typeof oStatistics.oKeywords == "undefined") {
-    	  PopulateData_Keywords(sPage);
-    	  return false;
-      }
-      PageLayout_Searches(aPage[1]);
-      break;
-    case "keywords":
-      if (typeof oStatistics.oKeywords == "undefined") {
-    	  PopulateData_Keywords(sPage);
-    	  return false;
-      }
-      PageLayout_Searches(aPage[1]);
-      break;
-  }
-  break;
+      case "searches":
+        switch (aPage[1]) {
+          case "keyphrasecloud":
+            if (typeof oStatistics.oKeyphrases == "undefined") {
+    	        PopulateData_Keyphrases(sPage);
+    	        return false;
+            }
+            PageLayout_Searches(aPage[1]);
+            break;
+          case "keyphrases":
+            if (typeof oStatistics.oKeyphrases == "undefined") {
+    	        PopulateData_Keyphrases(sPage);
+    	        return false;
+            }
+            PageLayout_Searches(aPage[1]);
+            break;
+          case "keywordcloud":
+            if (typeof oStatistics.oKeywords == "undefined") {
+    	        PopulateData_Keywords(sPage);
+    	        return false;
+            }
+            PageLayout_Searches(aPage[1]);
+            break;
+          case "keywords":
+            if (typeof oStatistics.oKeywords == "undefined") {
+    	        PopulateData_Keywords(sPage);
+    	        return false;
+            }
+            PageLayout_Searches(aPage[1]);
+            break;
+        }
+        break;
       case "session":
         if (typeof oStatistics.oSession == "undefined") {
       	  PopulateData_Session();
@@ -479,6 +486,32 @@ function DrawPie_Filetypes() {
   }
   DrawPie(oStatistics.oFiletypes.iTotalHits, aItem, aValue);
 }
+
+function DrawPie_Cluster() {
+  var aItem = [];
+  var aValue = [];
+  var iRunningTotal = 0;
+  var iCount = 0;
+  for (var iIndex in oStatistics.oCluster.aData) {
+    if (iCount < 6) {
+      if (oStatistics.oCluster.aData[iIndex].sSite != "&nbsp;") {
+        aItem.push(oStatistics.oCluster.aData[iIndex].sSite.toUpperCase() + ": " +
+                   Lang(oStatistics.oCluster.aData[iIndex].sDescription));
+      } else {
+        aItem.push(Lang(oStatistics.oCluster.aData[iIndex].sDescription));
+      }
+      aValue.push(oStatistics.oCluster.aData[iIndex].iHits);
+      iRunningTotal += oStatistics.oCluster.aData[iIndex].iHits;
+    }
+    iCount++;
+  }
+  if (oStatistics.oCluster.iTotalHits > iRunningTotal) {
+    aItem.push(Lang("Other Sites"));
+    aValue.push(oStatistics.oCluster.iTotalHits - iRunningTotal);
+  }
+  DrawPie(oStatistics.oCluster.iTotalHits, aItem, aValue);
+}
+
 
 function DrawPie_Keyphrases() {
   var aItem = [];
@@ -1174,6 +1207,62 @@ function DrawTable_Filetypes() {
     return ( [ false, (sHTML + "<tr><td class=\"center\" colspan=\"7\">" + Lang("There is no data to display") + "</td></tr></tbody></table>") ] );
   }
 }
+
+function DrawTable_Cluster() {
+  // get values
+  iTotalPages     = oStatistics.oCluster.iTotalPages;
+  iTotalHits      = oStatistics.oCluster.iTotalHits;
+  iTotalBW        = oStatistics.oCluster.iTotalBW;
+  aData           = oStatistics.oCluster.aData;
+
+  // create header
+  var sHTML = "<table class=\"tablesorter\" cellspacing=\"0\">\n" +
+              "<thead><tr>" +
+              "<th>" + Lang("Site") + "</th>" +
+              "<th>" + Lang("Description") + "</th>" +
+              "<th>" + Lang("Pages") + "</th>" +
+              "<th>&nbsp;</th>" +
+              "<th>" + Lang("Hits") + "</th>" +
+              "<th>&nbsp;</th>" +
+              "<th>" + Lang("Bandwidth") + "</th>" +
+              "<th class=\"noborder\">&nbsp;</th>" +
+              "</tr></thead>\n" +
+              "<tbody>";
+
+  // create table body
+  aHTML = new Array();
+  for (var iRow in aData) {
+    aHTML.push("<tr>" +
+               "<td>" + oStatistics.oCluster.aData[iRow].sSite + "</td>" +
+               "<td>" + oStatistics.oCluster.aData[iRow].sDescription + "</td>" +
+               "<td class=\"right\">" + NumberFormat(oStatistics.oCluster.aData[iRow].iPages, 0) + "</td>" +
+               "<td class=\"right\">" + ((oStatistics.oCluster.aData[iRow].iPages / iTotalPages) * 100).toFixed(1) + "%</td>" +
+               "<td class=\"right\">" + NumberFormat(oStatistics.oCluster.aData[iRow].iHits, 0) + "</td>" +
+               "<td class=\"right\">" + ((oStatistics.oCluster.aData[iRow].iHits / iTotalHits) * 100).toFixed(1) + "%</td>" +
+               "<td class=\"right\">" + DisplayBandwidth(oStatistics.oCluster.aData[iRow].iBW) + "</td>" +
+               "<td class=\"noborder right\">" + ((oStatistics.oCluster.aData[iRow].iBW / iTotalBW) * 100).toFixed(1) + "%</td>" +
+               "</tr>\n");
+  }
+
+
+  // output
+  if (aHTML.length > 0) {
+    sHTML = (sHTML + aHTML.join("\n") + "</tbody><tfoot><tr>" +
+             "<td class=\"noborder\">&nbsp;</td>" +
+             "<td class=\"noborder\">&nbsp;</td>" +
+             "<td class=\"noborder right\">" + NumberFormat(iTotalPages, 0) + "</td>" +
+             "<td class=\"noborder\">&nbsp;</td>" +
+             "<td class=\"noborder right\">" + NumberFormat(iTotalHits, 0) + "</td>" +
+             "<td class=\"noborder\">&nbsp;</td>" +
+             "<td class=\"noborder right\">" + DisplayBandwidth(iTotalBW) + "</td>" +
+             "<td class=\"noborder\">&nbsp;</td>" +
+             "</tr></tfoot></table>")
+    return ( [ true, sHTML ] );
+  } else {
+    return ( [ false, (sHTML + "<tr><td class=\"center\" colspan=\"7\">" + Lang("There is no data to display") + "</td></tr></tbody></table>") ] );
+  }
+}
+
 
 function DrawTable_OperatingSystems(sPage) {
   // get values
@@ -2040,6 +2129,17 @@ function PageLayout_Filetypes() {
   $("#content").fadeIn(g_iFadeSpeed);
 }
 
+function PageLayout_Cluster() {
+  var aTable = DrawTable_Cluster();
+  var sHTML = "<h2>" + Lang("Cluster") + "</h2><div id=\"pie\" class=\"pie\">&nbsp;</div><div class=\"tablePie\">" + aTable[1] + "</div>";
+  $("#content").html(sHTML);
+  if (aTable[0] == true) {
+    $(".tablesorter").tablesorter({ headers: { 2:{sorter:"commaNumber"}, 3:{ sorter: false }, 4:{sorter:'commaNumber'}, 5:{ sorter: false }, 6:{sorter:'bandwidth'}, 7:{sorter:'false'} }, sortList: [[2,1]],textExtraction:function(node){return node.innerHTML.replace(',', '');}, widgets: ['zebra'] });
+  }
+  DrawPie_Cluster();
+  $("#content").fadeIn(g_iFadeSpeed);
+}
+
 function PageLayout_OperatingSystems(sPage) {
   var aTable = DrawTable_OperatingSystems(sPage);
   switch (sPage) {
@@ -2739,6 +2839,51 @@ function PopulateData_Filetypes(sPage) {
       // apply data
       oF.aData.sort(Sort_Hits);
       oStatistics.oFiletypes = oF;
+      $("#loading").hide();
+      DrawPage(sPage);
+    }
+  });
+}
+
+function PopulateData_Cluster(sPage) {
+  $("#loading").show();
+
+	// create data objects
+	var oF = { "iTotalPages":0, "iTotalHits":0, "iTotalBW":0, "aData":[] };
+
+  $.ajax({
+    type: "GET",
+    url: XMLURL("CLUSTER"),
+    success: function(oXML){
+      CheckLastUpdate(oXML);
+
+      $(oXML).find('item').each(function() {
+        // collect values
+        var sSite    = $(this).attr("id");
+        var sDescription = gc_aClusterDesc[sSite];
+        if (typeof gc_aClusterDesc[sSite] == "undefined") {
+          sDescription = "&nbsp;";
+        }
+        var iPages   = parseInt($(this).attr("pages"));
+        var iHits    = parseInt($(this).attr("hits"));
+        var iBW      = parseInt($(this).attr("bw"));
+
+        // increment totals
+        oF.iTotalPages += iPages;
+        oF.iTotalHits  += iHits;
+        oF.iTotalBW    += iBW;
+
+        // populate array
+        oF.aData.push({ "sSite":sSite,
+                        "sDescription":sDescription,
+                        "iPages":iPages,
+                        "iHits":iHits,
+                        "iBW":iBW } );
+      });
+
+      // apply data
+      oF.aData.sort(Sort_Hits);
+      oStatistics.oCluster = oF;
       $("#loading").hide();
       DrawPage(sPage);
     }

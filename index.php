@@ -235,6 +235,7 @@
           <li id="tabsearches"><span onclick="ChangeTab(this, 'searches.keywords')"><?php echo Lang("Searches"); ?></span></li>
           <li id="tabsession"><span onclick="ChangeTab(this, 'session')"><?php echo Lang("Sessions"); ?></span></li>
           <li id="tabstatus"><span onclick="ChangeTab(this, 'status')"><?php echo Lang("Status"); ?></span></li>
+          <li id="tabstatus"><span onclick="ChangeTab(this, 'cluster')"><?php echo Lang("Cluster"); ?></span></li>
         </ul>
       </div>
       <br style="clear: both" />

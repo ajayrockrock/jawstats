@@ -67,6 +67,7 @@
     case "SIDER":
     case "SIDER_404":
     case "TIME":
+    case "CLUSTER":
       $clsAWStats->OutputXML($clsAWStats->CreateXMLString($sSection));
       break;
   }

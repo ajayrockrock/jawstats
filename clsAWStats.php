@@ -69,21 +69,22 @@
       $this->iTotalUnique = $this->GetSummaryElement($arrData, "totalunique", 1);
 
   	  // populate label array
-  	  $this->arrLabel["BROWSER"] 		  = array("id", "hits");
-  	  $this->arrLabel["DAY"] 			    = array("date", "pages", "hits", "bw", "visits");
-  	  $this->arrLabel["DOMAIN"] 		  = array("id", "pages", "hits", "bw");
-  	  $this->arrLabel["ERRORS"] 		  = array("id", "hits", "bw");
-  	  $this->arrLabel["FILETYPES"] 		= array("id", "hits", "bw", "noncompressedbw", "compressedbw");
-  	  $this->arrLabel["KEYWORDS"] 		= array("word", "freq");
-  	  $this->arrLabel["OS"] 			    = array("id", "hits");
-  	  $this->arrLabel["PAGEREFS"] 		= array("url", "pages", "hits");
-  	  $this->arrLabel["ROBOT"] 			  = array("id", "hits", "bw", "lastvisit", "robotstxt");
-  	  $this->arrLabel["SEARCHWORDS"] 	= array("phrase", "freq");
-  	  $this->arrLabel["SEREFERRALS"] 	= array("id", "pages", "hits");
-  	  $this->arrLabel["SESSION"] 		  = array("range", "freq");
-  	  $this->arrLabel["SIDER"] 	      = array("url", "pages", "bw", "entry", "exit");
-  	  $this->arrLabel["SIDER_404"] 	  = array("url", "hits", "referrer");
-  	  $this->arrLabel["TIME"]			    = array("hour", "pages", "hits", "bw", "notviewedpages", "notviewedhits", "notviewedbw");
+  	  $this->arrLabel["BROWSER"]     = array("id", "hits");
+  	  $this->arrLabel["DAY"]         = array("date", "pages", "hits", "bw", "visits");
+  	  $this->arrLabel["DOMAIN"]      = array("id", "pages", "hits", "bw");
+  	  $this->arrLabel["ERRORS"]      = array("id", "hits", "bw");
+  	  $this->arrLabel["FILETYPES"]   = array("id", "hits", "bw", "noncompressedbw", "compressedbw");
+  	  $this->arrLabel["KEYWORDS"]    = array("word", "freq");
+  	  $this->arrLabel["OS"]          = array("id", "hits");
+  	  $this->arrLabel["PAGEREFS"]    = array("url", "pages", "hits");
+  	  $this->arrLabel["ROBOT"]       = array("id", "hits", "bw", "lastvisit", "robotstxt");
+  	  $this->arrLabel["SEARCHWORDS"] = array("phrase", "freq");
+  	  $this->arrLabel["SEREFERRALS"] = array("id", "pages", "hits");
+  	  $this->arrLabel["SESSION"]     = array("range", "freq");
+  	  $this->arrLabel["SIDER"]       = array("url", "pages", "bw", "entry", "exit");
+  	  $this->arrLabel["SIDER_404"]   = array("url", "hits", "referrer");
+  	  $this->arrLabel["TIME"]        = array("hour", "pages", "hits", "bw", "notviewedpages", "notviewedhits", "notviewedbw");
+  	  $this->arrLabel["CLUSTER"]     = array("id", "pages", "hits", "bw");
     }
 
     function CreateJSON($sSection) {
@@ -622,6 +623,7 @@
       case "thismonth.pages":
       case "thismonth.visits":
       case "time";
+      case "cluster";
         $bValid = true;
         break;
     }
